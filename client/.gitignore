@@ -1,0 +1,5 @@
+angular/**/*.js
+angular/**/*.map
+
+node_modules
+typings

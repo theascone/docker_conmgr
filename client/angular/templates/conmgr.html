@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row p-t-1 p-b-1">
+    <div class="col-sm-12">
+      <h1 class="text-sm-center">Conmgr</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <alert *ngFor="#alert of alerts;#i = index" [type]="alert.type" dismissible="true" (close)="closeAlert(i)">
+        {{ alert?.msg }}
+      </alert>
+    </div>
+  </div>
+  <div class="row hidden-xs-down">
+    <div class="col-sm-3">Name</div>
+    <div class="col-sm-7 col-lg-8">Info</div>
+    <div class="col-sm-2 col-lg-1">Action</div>
+  </div>
+  <div class="row">
+    <hr>
+    <div class="col-sm-offset-10 col-sm-2 col-lg-offset-11 col-lg-1">
+      <button class="btn btn-sm btn-block btn-primary" [disabled]="pending" (click)="refresh()">
+        <i class="fa fa-refresh" [ngClass]="{'fa-spin':pending}" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+  <div *ngFor="#container of containers" class="row">
+    <hr>
+    <div class="col-sm-3"><span class="text-muted hidden-sm-up">Name</span> {{container.name}}</div>
+    <div class="col-sm-7 col-lg-8"><span class="text-muted hidden-sm-up">Info</span> {{container.info}}</div>
+    <div class="col-sm-2 col-lg-1">
+      <button *ngIf=" container.running" class="btn btn-sm btn-block  btn-danger" [disabled]="pending" (click)="startStop(container)">
+        <i class="fa fa-pause" aria-hidden="true"></i>
+      </button>
+      <button *ngIf="!container.running" class="btn btn-sm btn-block btn-success" [disabled]="pending" (click)="startStop(container)">
+        <i class="fa fa-play" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="m-t-3 col-sm-12 text-muted text-sm-center">
+      By Addis Dittebrandt
+    </div>
+  </div>
+</div>
