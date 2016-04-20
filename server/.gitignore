@@ -5,4 +5,5 @@ lib64
 
 **/__pycache__
 
+.Python
 pip-selfcheck.json

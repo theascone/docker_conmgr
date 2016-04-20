@@ -1,45 +1,59 @@
 import http.server
 import json
 
-import docker-ops
+import docker_ops
 
 class ConmgrHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
-    def do_HEAD(self):
+    def send_response_ok(self):
         self.send_response(200)
         self.send_header("Content-type", "text/json")
         self.end_headers()
-    def do_GET(self):
-        print(self.path)
+    def send_response_ok_nb(self):
+        self.send_response(200)
+        self.end_headers()
+    def send_response_nf(self):
+        self.send_response(404)
+        self.end_headers()
+    def send_response_br(self):
+        self.send_response(400)
+        self.end_headers()
+
+    def parse_body(self):
+        body_string = self.rfile.read(int(self.headers['Content-Length'])).decode("utf-8")
+        try:
+            body = json.loads(body_string)
+            if 'id' in body:
+                return body
+            else:
+                return None
+        except json.JSONDecodeError:
+            return None
+
+    def do_HEAD(self):
         if self.path == "/api/getContainers":
-            containers = docker-ops.getContainers();
-
-            self.send_response(200)
-            self.send_header("Content-type", "text/json")
-            self.end_headers()
-
-            print(self.wfile)
-            self.wfile.write("<html><head><title>Title goes here.</title></head>".encode("utf-8"))
-            self.wfile.write("<body><p>This is a test.</p>".encode("utf-8"))
-            self.wfile.write(("<p>You accessed path: %s</p>" % self.path).encode("utf-8"))
-            self.wfile.write("</body></html>".encode("utf-8"))
+            self.send_response_ok()
         else:
-            self.send_response(404)
-            self.send_header("Content-type", "text/json")
-            self.end_headers()
-
+            self.send_response_nf()
+    def do_GET(self):
+        if self.path == "/api/getContainers":
+            self.send_response_ok()
+            self.wfile.write(json.JSONEncoder().encode(o=docker_ops.getContainers()).encode('utf-8'))
+        else:
+            self.send_response_nf()
     def do_POST(self):
-        print(self.path)
-        if self.path == "/api/startContainer":
-            body = json.load(self.rfile)
-            docker-ops.startContainer()
-
-            self.send_response(200)
-            self.send_header("Content-type", "text/json")
-            self.end_headers()
-        else if self.path == "/api/stopContainer":
-            body = json.load(self.rfile)
-            docker-ops.stopContainer()
+        body = self.parse_body()
+        if not body == None:
+            if self.path == "/api/startContainer":
+                if docker_ops.startContainer(body['id']):
+                    self.send_response_ok_nb()
+                else:
+                    self.send_response_nf()
+            elif self.path == "/api/stopContainer":
+                if docker_ops.stopContainer(body['id']):
+                    self.send_response_ok_nb()
+                else:
+                    self.send_response_nf()
+            else:
+                self.send_response_nf()
         else:
-            self.send_response(404)
-            self.send_header("Content-type", "text/json")
-            self.end_headers()
+            self.send_response_br()
