@@ -1,11 +1,11 @@
 version: '2'
 services:
   client:
-    build: theascone/conmgr:client-latest
+    image: theascone/conmgr:client-latest
     links:
       - "server:server"
     ports:
-      - "8000:80"
+      - "80:80"
   server:
     image: theascone/conmgr:server-latest
     environment:
