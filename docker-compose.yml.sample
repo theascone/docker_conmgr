@@ -1,13 +1,13 @@
 version: '2'
 services:
   client:
-    image: theascone/conmgr:client-latest
+    image: theascone/docker_conmgr:client-latest
     links:
       - "server:server"
     ports:
       - "80:80"
   server:
-    image: theascone/conmgr:server-latest
+    image: theascone/docker_conmgr:server-latest
     environment:
       CONMGR_GROUP: sample_group
     volumes:
