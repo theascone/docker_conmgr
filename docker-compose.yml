@@ -1,0 +1,12 @@
+version: '2'
+services:
+  client:
+    build: client
+    links:
+      - "server:server"
+    ports:
+      - "8000:80"
+  server:
+    build: server
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
