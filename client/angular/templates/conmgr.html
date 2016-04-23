@@ -20,7 +20,7 @@
     <hr>
     <div class="col-sm-offset-10 col-sm-2 col-lg-offset-11 col-lg-1">
       <button class="btn btn-sm btn-block btn-primary" [disabled]="pending" (click)="refresh()">
-        <i class="fa fa-refresh" [ngClass]="{'fa-spin':pending}" aria-hidden="true"/>
+        <i class="fa fa-refresh" [ngClass]="{'fa-spin':pending}" aria-hidden="true"></i>
       </button>
     </div>
   </div>
@@ -30,10 +30,10 @@
     <div class="col-sm-7 col-lg-8"><span class="text-muted hidden-sm-up">Info</span> {{container.info}}</div>
     <div class="col-sm-2 col-lg-1">
       <button *ngIf=" container.running" class="btn btn-sm btn-block  btn-danger" [disabled]="pending" (click)="startStop(container)">
-        <i class="fa fa-pause" aria-hidden="true"/>
+        <i class="fa fa-pause" aria-hidden="true"></i>
       </button>
       <button *ngIf="!container.running" class="btn btn-sm btn-block btn-success" [disabled]="pending" (click)="startStop(container)">
-        <i class="fa fa-play" aria-hidden="true"/>
+        <i class="fa fa-play" aria-hidden="true"></i>
       </button>
     </div>
   </div>
