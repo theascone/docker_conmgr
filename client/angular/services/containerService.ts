@@ -1,5 +1,7 @@
 import {Inject, Injectable} from 'angular2/core';
 import {Http} from 'angular2/http';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/map'
 
 import {Container} from '../shared/container';
 
@@ -7,32 +9,35 @@ import {Container} from '../shared/container';
 export class ContainerService {
   constructor(private http: Http) {}
 
-  getContainers(): Promise<Container[]> {
-    return Promise.reject<Container[]>({});
-    //return Promise.resolve(CONTS);
-    //return this.http.get('api/getContainers').toPromise().then(response => {
-        //if (response.ok) {
-        //  return response.json();
-        //} else {
-        //
-        //}
-    //});
+  getContainers(): Observable<Container[]> {
+    return this.http.get('/api/getContainers').map(response => {
+        if (response.status == 200) {
+          return response.json();
+        } else {
+          throw new Error();
+        }
+    });
   }
 
-  startContainer(id: string): Promise<void> {
+  startContainer(id: string): Observable<{}> {
     var req = {"id":id};
-    return this.http.post('api/startContainer', req.json());
+    return this.http.post('/api/startContainer', JSON.stringify(req)).map(response => {
+      if (response.status == 200) {
+        return {};
+      } else {
+        throw new Error();
+      }
+    });
   }
 
-  stopContainer(id: string): Promise<void> {
-    return new Promise<void>(resolve =>
-        setTimeout(()=>resolve(), 2000) // 2 seconds
-    );
+  stopContainer(id: string): Observable<{}> {
+    var req = {"id":id};
+    return this.http.post('/api/stopContainer', JSON.stringify(req)).map(response => {
+      if (response.status == 200) {
+        return {};
+      } else {
+        throw new Error();
+      }
+    });
   }
 }
-
-var CONTS: Container[] = [
-  { "id": "4kghj23ghj3rhjr", "running":true, "name":"minecraft1", "info": "heey"},
-  { "id": "4kghj23ghj3rhjr", "running":false, "name":"minecraft2", "info": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"},
-  { "id": "4kghj23ghj3rhjr", "running":false, "name":"minecraft3", "info": "heey thats petty good"}
-]

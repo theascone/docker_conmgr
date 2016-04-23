@@ -11,21 +11,29 @@
     <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
     <script src="node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
 
-    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="node_modules/angular2/bundles/angular2-polyfills.min.js"></script>
     <script src="node_modules/systemjs/dist/system.src.js"></script>
-    <script src="node_modules/rxjs/bundles/Rx.js"></script>
-    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
-    <script src="node_modules/angular2/bundles/http.dev.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.min.js"></script>
+    <script src="node_modules/angular2/bundles/angular2.min.js"></script>
+    <script src="node_modules/angular2/bundles/http.min.js"></script>
     <script src="node_modules/ng2-bootstrap/bundles/ng2-bootstrap.min.js"></script>
 
     <!-- 2. Configure SystemJS -->
     <script>
       System.config({
+        baseURL: '/node_modules',
+        "defaultJSExtensions": true,
+        map: {
+          angular: '/angular/'
+        },
         packages: {
           angular: {
             format: 'register',
             defaultExtension: 'js'
           }
+        },
+        paths: {
+          "moment":   "moment/moment"
         }
       });
       System.import('angular/main.js')

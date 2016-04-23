@@ -1,6 +1,6 @@
 import {Component, OnInit} from 'angular2/core';
 import {NgClass, CORE_DIRECTIVES} from 'angular2/common';
-import { Alert } from 'ng2-bootstrap/ng2-bootstrap';
+import {Alert} from 'ng2-bootstrap/ng2-bootstrap';
 
 import {Container} from '../shared/container';
 
@@ -26,37 +26,31 @@ export class ConmgrComponent implements OnInit {
   startStop(container) {
     this.pending = true;
     if (container.running) {
-      this._containerService.startContainer(container.id).then(() => {
-        container.running = false;
-        this.pending = false;
-      }).catch(err => {
-        this.addAlert('Start failed!');
-        this.pending = false;
-      });
+      this._containerService.stopContainer(container.id).subscribe(
+        res => container.running = false,
+        err => this.addAlert('Stop failed!'),
+        () => this.pending = false
+      );
     } else {
-      this._containerService.stopContainer(container.id).then(() => {
-        container.running = true;
-        this.pending = false;
-      }).catch(err => {
-        this.addAlert('Stop failed!');
-        this.pending = false;
-      });
+      this._containerService.startContainer(container.id).subscribe(
+        res => container.running = true,
+        err => this.addAlert('Start failed!'),
+        () =>  this.pending = false
+      );
     }
   }
 
   refresh() {
     this.pending = true;
-    this._containerService.getContainers().then(containers => {
-      this.containers = containers;
-      this.pending = false;
-    }).catch(err => {
-      this.addAlert('Refresh failed!')
-      this.pending = false;
-    });
+    this._containerService.getContainers().subscribe(
+      containers => this.containers = containers,
+      err => this.addAlert('Refresh failed!'),
+      () => this.pending = false
+    );
   }
 
   addAlert(msg: string) {
-    this.alerts.push({msg: msg, type: 'alert', closable: true})
+    this.alerts.push({msg: msg, type: 'danger', closable: true})
   }
 
   closeAlert(alertIndex) {
