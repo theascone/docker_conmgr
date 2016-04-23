@@ -1,12 +1,14 @@
 version: '2'
 services:
   client:
-    build: client
+    build: theascone/conmgr:client-latest
     links:
       - "server:server"
     ports:
       - "8000:80"
   server:
-    build: server
+    image: theascone/conmgr:server-latest
+    environment:
+      CONMGR_GROUP: sample_group
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
